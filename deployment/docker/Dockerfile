@@ -58,22 +58,10 @@ RUN echo "deb http://deb.debian.org/debian/ trixie main contrib non-free" > /etc
     && rm -rf /tmp/* \
     && rm -rf /var/tmp/*
 
-# Install pdf-libs Node.js dependencies and clean up
+# Copy application files
 COPY package.json yarn.lock ./
-RUN yarn install --production --frozen-lockfile \
-    && yarn cache clean \
-    && find node_modules -name "*.md" -delete \
-    && find node_modules -name "*.ts" -delete \
-    && find node_modules -name "*.map" -delete \
-    && find node_modules -type d -name "test" -exec rm -rf {} + 2>/dev/null || true \
-    && find node_modules -type d -name "tests" -exec rm -rf {} + 2>/dev/null || true \
-    && find node_modules -type d -name "docs" -exec rm -rf {} + 2>/dev/null || true
-
-# Add sources
 COPY src ./src
 COPY *.js ./
-
-# Add docs
 COPY docs ./docs
 
 # Set runtime environment variables
@@ -83,4 +71,4 @@ ENV EXTRACT_FORMFIELDS=$EXTRACT_FORMFIELDS_ROOT/bin/extract-formfields \
 
 EXPOSE ${PORT}
 
-CMD [ "node", "main.js" ]
+CMD ["sh", "-c", "yarn install --production --frozen-lockfile && node main.js"]
