@@ -71,4 +71,4 @@ ENV EXTRACT_FORMFIELDS=$EXTRACT_FORMFIELDS_ROOT/bin/extract-formfields \
 
 EXPOSE ${PORT}
 
-CMD ["sh", "-c", "yarn install --production --frozen-lockfile && node main.js"]
+CMD ["sh", "-c", "yarn install --production && node main.js"]
